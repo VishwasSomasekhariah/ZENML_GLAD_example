@@ -128,8 +128,8 @@ class KFoldEval:
                     np.random.seed(i + 40)
                     random.seed(i + 40)
                     torch.manual_seed(i + 40)
-                    torch.cuda.manual_seed(i + 40)
-                    torch.cuda.manual_seed_all(i + 40)
+                    # torch.cuda.manual_seed(i + 40)
+                    # torch.cuda.manual_seed_all(i + 40)
 
                     dataset = self.dataset_class()
                     train_data, val_data = dataset.get_model_selection_fold(fold_k,cls)

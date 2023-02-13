@@ -21,7 +21,7 @@ import numpy as np
 from utils import compute_pre_recall_f1,format_time
 class GLAD_trainer:
 
-    def __init__(self, model, loss_function,device='cuda'):
+    def __init__(self, model, loss_function,device='cpu'):
 
         self.loss_fun = loss_function
         self.device = torch.device(device)
@@ -86,7 +86,7 @@ class GLAD_trainer:
         test_auc, test_f1, test_score = None, None,None
         score,target = None,None
 
-        torch.cuda.empty_cache()
+        # torch.cuda.empty_cache()
         try:
             self.model.eval()
             self.model.init_center(train_loader)

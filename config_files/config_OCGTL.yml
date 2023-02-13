@@ -1,7 +1,7 @@
 model:
   - OCGTL
 device:
-  - cuda
+  - cpu
 batch_size:
   - 128
 learning_rate:

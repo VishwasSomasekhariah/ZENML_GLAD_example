@@ -161,7 +161,7 @@ class OCGIN(nn.Module):
         self.num_layers = config['num_layers']
         self.device = config['device']
         self.net = GIN(dim_features, self.dim_targets, config)
-        self.center = torch.zeros(1, self.dim_targets * self.num_layers, requires_grad=False).to('cuda')
+        self.center = torch.zeros(1, self.dim_targets * self.num_layers, requires_grad=False)
         self.reset_parameters()
     def forward(self, data):
         data = data.to(self.device)
@@ -171,7 +171,7 @@ class OCGIN(nn.Module):
     def init_center(self, train_loader):
         with torch.no_grad():
             for data in train_loader:
-                data = data.to('cuda')
+                # data = data.to('cuda')
                 z = self.forward(data)
                 self.center += torch.sum(z[0], 0, keepdim=True)
             self.center = self.center / len(train_loader.dataset)
