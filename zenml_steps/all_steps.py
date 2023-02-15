@@ -4,7 +4,7 @@ import torch
 import numpy as np
 from config.base import Grid, Config
 from evaluation.Experiments import runGraphExperiment
-from zenml.steps import step, BaseParameters
+from zenml.steps import step, BaseParameters, Output
 
 
 class LoadParameters(BaseParameters):
@@ -16,7 +16,9 @@ class LoadParameters(BaseParameters):
 
 # config file params and dataset name can be passed as BaseParameters to the step function
 @step
-def load_dataset(params: LoadParameters):
+def load_dataset(
+    params: LoadParameters,
+) -> Output(dataset=Config.dataset, model_configurations=Grid):
     model_configurations = Grid(params.config_file, params.dataset_name)
     model_configuration = Config(**model_configurations[0])
     dataset = model_configuration.dataset
@@ -57,7 +59,7 @@ def create_chunks(
 
 @step
 # take the required step configurations
-def train(model_configurations: Grid, folds: Dict[str, Dict[str, List[Any]]]):
+def train(model_configurations: Grid, folds: Dict[str, Dict[str, List[Any]]]) -> Output(result=Dict, saved_scores=Dict):
     exp_class = runGraphExperiment
     best_config = model_configurations[0]
     experiment = exp_class(best_config)
@@ -108,9 +110,12 @@ def train(model_configurations: Grid, folds: Dict[str, Dict[str, List[Any]]]):
 
 
 @step
-def process_results(result):
+def process_results(result) -> Output(assessment_results=Dict):
     # read from the results object, do some processing and write to assessment object
-    (TS_aucs, TS_f1s,) = (
+    (
+        TS_aucs,
+        TS_f1s,
+    ) = (
         [],
         [],
     )
