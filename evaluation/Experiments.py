@@ -22,7 +22,7 @@ class runGraphExperiment():
     def __init__(self, model_configuration):
         self.model_config = Config.from_dict(model_configuration)
 
-    def run_test(self, dataset,cls,logger):
+    def run_test(self, dataset,cls,logger=None):
 
         train_data, val_data,test_data =dataset
 
