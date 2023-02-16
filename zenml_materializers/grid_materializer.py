@@ -14,12 +14,12 @@ class GridMaterializer(BaseMaterializer):
     def load(self, data_type: Type[Grid]) -> Grid:
         """Read from artifact store"""
         super().load(data_type)
-        with fileio.open(os.path.join(self.uri, 'data.pkl'), 'r') as f:
+        with fileio.open(os.path.join(self.uri, 'data.pkl'), 'rb') as f:
             data = pickle.load(f)
         return data
 
     def save(self, my_obj: Grid) -> None:
         """Write to artifact store"""
         super().save(my_obj)
-        with fileio.open(os.path.join(self.uri, 'data.pkl'), 'w') as f:
+        with fileio.open(os.path.join(self.uri, 'data.pkl'), 'wb') as f:
             pickle.dump(my_obj, f)
