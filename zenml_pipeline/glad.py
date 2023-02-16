@@ -9,5 +9,5 @@ def glad_pipeline(
 ):
     dataset, model_configurations = load_dataset()
     chunks = create_chunks(model_configurations, dataset)
-    result = train(model_configurations, chunks)
+    result, _ = train(model_configurations, chunks)
     assessment_result = process_results(result)
