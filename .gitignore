@@ -130,3 +130,6 @@ dmypy.json
 
 # ZenML's config folder
 .zen
+
+# data folder
+data/
