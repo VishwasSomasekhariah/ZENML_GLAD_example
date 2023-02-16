@@ -5,12 +5,13 @@ import numpy as np
 from config.base import Grid, Config
 from evaluation.Experiments import runGraphExperiment
 from zenml.steps import step, BaseParameters, Output
+from loader.GraphDataClass import TUDatasetManager
 
 
 class LoadParameters(BaseParameters):
     """Parameters for the load step"""
 
-    config_file: str = "config_OCGTL.yml"
+    config_file: str = "config_files/config_OCGTL.yml"
     dataset_name: str = "dd"
 
 
@@ -18,10 +19,10 @@ class LoadParameters(BaseParameters):
 @step
 def load_dataset(
     params: LoadParameters,
-) -> Output(dataset=Config.dataset, model_configurations=Grid):
+) -> Output(dataset=TUDatasetManager, model_configurations=Grid):
     model_configurations = Grid(params.config_file, params.dataset_name)
     model_configuration = Config(**model_configurations[0])
-    dataset = model_configuration.dataset
+    dataset = model_configuration.dataset()
     return dataset, model_configurations
 
 
@@ -33,14 +34,14 @@ class FoldsParameters(BaseParameters):
 
 @step
 def create_chunks(
-    model_configurations: Grid, dataset, params: FoldsParameters
+    model_configurations: Grid, dataset: TUDatasetManager, params: FoldsParameters
 ) -> Dict[str, Dict[str, List[Any]]]:
     # create folds
     chunks = {}
     for fold_k in range(params.num_folds):
         num_repeat = model_configurations[0]["num_repeat"]
         chunks[fold_k] = {}
-        for cls in dataset.num_cls:
+        for cls in range(dataset.num_cls):
             chunks[fold_k][cls] = []
             for i in range(num_repeat):
                 torch.backends.cudnn.deterministic = True
@@ -110,7 +111,7 @@ def train(model_configurations: Grid, folds: Dict[str, Dict[str, List[Any]]]) ->
 
 
 @step
-def process_results(result) -> Output(assessment_results=Dict):
+def process_results(result: Dict) -> Output(assessment_results=Dict):
     # read from the results object, do some processing and write to assessment object
     (
         TS_aucs,

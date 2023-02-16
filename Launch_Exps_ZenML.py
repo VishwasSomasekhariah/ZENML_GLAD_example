@@ -22,7 +22,8 @@ from zenml_steps.all_steps import (
     LoadParameters,
 )
 from zenml_pipeline.glad import glad_pipeline
-
+from zenml_materializers.grid_materializer import GridMaterializer
+from zenml_materializers.tu_materializer import TUDatasetManagerMaterializer
 
 def get_args():
     parser = argparse.ArgumentParser()

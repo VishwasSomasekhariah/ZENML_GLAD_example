@@ -52,7 +52,7 @@ class NormalizedDegree(object):
 
 class DatasetManager:
     def __init__(self,  num_folds=10, seed=0, holdout_test_size=0.1,
-                  DATA_DIR = '/fs/scratch/rng_cr_bcai_dl/qic2rng/datasets/'):
+                  DATA_DIR = './data/'):
 
         self.root_dir = Path(DATA_DIR)
         self.holdout_test_size = holdout_test_size
