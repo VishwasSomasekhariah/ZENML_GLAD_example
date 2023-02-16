@@ -41,7 +41,6 @@ def create_chunks(
     for fold_k in range(params.num_folds):
         num_repeat = model_configurations[0]["num_repeat"]
         chunks[fold_k] = {}
-        breakpoint()
         for cls in range(dataset.num_cls):
             chunks[fold_k][cls] = []
             for i in range(num_repeat):

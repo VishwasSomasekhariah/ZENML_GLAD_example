@@ -39,7 +39,7 @@ if __name__ == "__main__":
     config_file = "config_files/" + args.config_file
 
     glad_pipeline_instance = glad_pipeline(
-        load_dataset=load_dataset(LoadParameters(config_file=config_file)).configure(output_materializers={"dataset": TUDatasetManagerMaterializer, "model_configurations": GridMaterializer}),
+        load_dataset=load_dataset(LoadParameters(config_file=config_file)),
         create_chunks=create_chunks(),
         train=train(),
         process_results=process_results(),
