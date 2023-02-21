@@ -8,7 +8,7 @@ from config.base import Grid
 import pickle
 
 class GridMaterializer(BaseMaterializer):
-    ASSOCIATED_TYPES = (Grid,)
+    ASSOCIATED_TYPES = (Grid,) #This is how ZenML knows to use this materializer type when it encounters Grid in any of the steps input or output parameter.
     ASSOCIATED_ARTIFACT_TYPE = ArtifactType.DATA
 
     def load(self, data_type: Type[Grid]) -> Grid:

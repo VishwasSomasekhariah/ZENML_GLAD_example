@@ -8,7 +8,7 @@ import pickle
 from loader.GraphDataClass import TUDatasetManager, TUDataset
 
 class TUDatasetManagerMaterializer(BaseMaterializer):
-    ASSOCIATED_TYPES = (TUDatasetManager, TUDataset)
+    ASSOCIATED_TYPES = (TUDatasetManager, TUDataset) #This is how ZenML knows to use this materializer type when it encounters TUDatasetManager in any of the steps input or output parameter.
     ASSOCIATED_ARTIFACT_TYPE = ArtifactType.DATA
 
     def load(self, data_type: Union[Type[TUDatasetManager], Type[TUDataset]]) -> Union[TUDatasetManager, TUDataset]:
