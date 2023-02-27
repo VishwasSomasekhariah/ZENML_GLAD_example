@@ -122,12 +122,12 @@ def process_results(result: Dict) -> Output(assessment_results=Dict):
     )
     assessment_results = {}
 
-    for normal_cls in range(len(result[0])):
+    for normal_cls in range(len(result['0'])):
         Fold_TS_aucs, Fold_TS_f1s = [], []
 
         for i in range(len(result)):
             try:
-                variant_scores = result[i][normal_cls]
+                variant_scores = result[f"{i}"][f"{normal_cls}"]
                 # Fold_VAL_aucs.append(variant_scores['VAL_auc_'+str(normal_cls)])
                 Fold_TS_aucs.append(variant_scores["TS_auc_" + str(normal_cls)])
                 Fold_TS_f1s.append(variant_scores["TS_f1_" + str(normal_cls)])
