@@ -1,6 +1,13 @@
+from zenml.config import DockerSettings
+from zenml.integrations.constants import MLFLOW
 from zenml.pipelines import pipeline
 
-@pipeline
+docker_settings = DockerSettings(
+    required_integrations=[MLFLOW], requirements="../requirements.txt"
+)
+
+
+@pipeline(settings={"docker": docker_settings})
 def glad_pipeline(
     load_dataset,
     create_chunks,
