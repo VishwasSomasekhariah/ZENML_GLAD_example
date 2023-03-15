@@ -35,9 +35,11 @@ def get_args():
 
 
 if __name__ == "__main__":
+    #Get command line arguments
     args = get_args()
     config_file = "config_files/" + args.config_file
 
+    #Initialize the pipeline instance
     glad_pipeline_instance = glad_pipeline(
         load_dataset=load_dataset(LoadParameters(config_file=config_file)),
         create_chunks=create_chunks(),
@@ -45,6 +47,7 @@ if __name__ == "__main__":
         process_results=process_results(),
     )
 
+    #Run the pipeline instance
     glad_pipeline_instance.run()
 
 # # Raising the Bar in Graph-level Anomaly Detection (GLAD)
