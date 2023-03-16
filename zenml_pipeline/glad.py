@@ -1,6 +1,13 @@
+from zenml.config import DockerSettings
+from zenml.integrations.constants import MLFLOW
 from zenml.pipelines import pipeline
-#Define the pipeline
-@pipeline
+
+docker_settings = DockerSettings(
+    required_integrations=[MLFLOW], requirements="../requirements.txt"
+)
+
+
+@pipeline(settings={"docker": docker_settings})
 def glad_pipeline(
     load_dataset,
     create_chunks,
@@ -12,5 +19,6 @@ def glad_pipeline(
     dataset, model_configurations = load_dataset()
     chunks = create_chunks(model_configurations, dataset)
     result, _ = train(model_configurations, chunks)
+
     #If a step's input parameter is not dependent on another steps's out then that step is run in parallel.
     assessment_result = process_results(result)

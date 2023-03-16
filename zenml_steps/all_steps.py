@@ -58,14 +58,36 @@ def create_chunks(
     return chunks
 
 
-@step
+from zenml.client import Client
+from zenml.integrations.mlflow.experiment_trackers import (
+    MLFlowExperimentTracker,
+)
+import mlflow
+
+experiment_tracker = Client().active_stack.experiment_tracker
+
+if not experiment_tracker or not isinstance(
+    experiment_tracker, MLFlowExperimentTracker
+):
+    raise RuntimeError(
+        "Your active stack needs to contain a MLFlow experiment tracker for "
+        "this project to work."
+    )
+
+
+@step(experiment_tracker=experiment_tracker.name)
 # take the required step configurations
-def train(model_configurations: Grid, folds: Dict[str, Dict[str, List[Any]]]) -> Output(result=Dict, saved_scores=Dict):
+def train(
+    model_configurations: Grid, folds: Dict[str, Dict[str, List[Any]]]
+) -> Output(result=Dict, saved_scores=Dict):
     exp_class = runGraphExperiment
     best_config = model_configurations[0]
     experiment = exp_class(best_config)
     result = {}
     saved_scores = {}
+
+    mlflow.pytorch.autolog()
+    
     for fold in folds.keys():
         classes = folds[fold]
         val_auc_list, test_auc_list, test_f1_list = [], [], []
@@ -122,7 +144,7 @@ def process_results(result: Dict) -> Output(assessment_results=Dict):
     )
     assessment_results = {}
 
-    for normal_cls in range(len(result['0'])):
+    for normal_cls in range(len(result["0"])):
         Fold_TS_aucs, Fold_TS_f1s = [], []
 
         for i in range(len(result)):
